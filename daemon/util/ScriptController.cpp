@@ -501,10 +501,10 @@ void ScriptController::StartProcess(int* pipein, int* pipeout)
 	debug("Starting process: %s", cmdLine);
 
 	WString wideWorkingDir = FileSystem::UtfPathToWidePath(workingDir);
-	if (strlen(workingDir) > 260 - 14)
-	{
-		GetShortPathNameW(wideWorkingDir, wideWorkingDir, wideWorkingDir.Length() + 1);
-	}
+	// if (strlen(workingDir) > 260 - 14)
+	// {
+	GetShortPathNameW(wideWorkingDir, wideWorkingDir, wideWorkingDir.Length() + 1);
+	//}
 
 	// create pipes to write and read data
 	HANDLE readPipe, readProcPipe;
