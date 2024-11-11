@@ -2,6 +2,7 @@
  *  This file is part of nzbget. See <https://nzbget.com>.
  *
  *  Copyright (C) 2013-2016 Andrey Prygunkov <hugbug@users.sourceforge.net>
+ *  Copyright (C) 2024 Denis <denis@nzbget.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 
@@ -27,7 +28,22 @@
 #include "DownloadInfo.h"
 #include "ScriptController.h"
 
-class MoveController : public Thread, public ScriptController
+inline std::array<std::string, 11> EXCLUDED_EXTENSIONS
+{ 
+	".vob", 
+	".rar", 
+	".par2", 
+	".mts", 
+	".m2ts", 
+	".cpi",
+	".clpi", 
+	".mpl", 
+	".mpls", 
+	".bdm", 
+	".bdmv" 
+};
+
+class MoveController final : public Thread, public ScriptController
 {
 public:
 	virtual void Run();
@@ -37,9 +53,11 @@ protected:
 	virtual void AddMessage(Message::EKind kind, const char* text);
 
 private:
+	void SanitizeFilenames();
+
 	PostInfo* m_postInfo;
-	CString m_interDir;
-	CString m_destDir;
+	std::string m_interDir;
+	std::string m_destDir;
 
 	bool MoveFiles();
 };

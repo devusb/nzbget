@@ -141,8 +141,8 @@ public:
 	Groups* GetGroups() { return &m_groups; }
 	const char* GetSubject() { return m_subject; }
 	void SetSubject(const char* subject) { m_subject = subject; }
-	const char* GetFilename() { return m_filename; }
-	void SetFilename(const char* filename) { m_filename = filename; }
+	const char* GetFilename() { return m_filename.c_str(); }
+	void SetFilename(std::string filename) { m_filename = std::move(filename); }
 	void SetOrigname(const char* origname) { m_origname = origname; }
 	const char* GetOrigname() { return m_origname; }
 	void MakeValidFilename();
@@ -213,7 +213,7 @@ private:
 	Groups m_groups;
 	ServerStatList m_serverStats;
 	CString m_subject;
-	CString m_filename;
+	std::string m_filename;
 	CString m_origname;
 	int64 m_size = 0;
 	int64 m_remainingSize = 0;

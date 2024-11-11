@@ -75,6 +75,7 @@ set(SRC
 	${CMAKE_SOURCE_DIR}/daemon/queue/QueueEditor.cpp
 	${CMAKE_SOURCE_DIR}/daemon/queue/Scanner.cpp
 	${CMAKE_SOURCE_DIR}/daemon/queue/UrlCoordinator.cpp
+	${CMAKE_SOURCE_DIR}/daemon/queue/Deobfuscation.cpp
 
 	${CMAKE_SOURCE_DIR}/daemon/remote/BinRpc.cpp
 	${CMAKE_SOURCE_DIR}/daemon/remote/RemoteClient.cpp
