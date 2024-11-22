@@ -22,9 +22,7 @@
 #include "nzbget.h"
 
 #include <windows.h>
-
 #include "Utf8.h"
-#include "Log.h"
 
 namespace Utf8
 {
@@ -35,12 +33,17 @@ namespace Utf8
 		int requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
 		if (requiredSize <= 0) return std::nullopt;
 
-		std::wstring wstr(requiredSize, '\0');
+		wchar_t* buffer = new (std::nothrow) wchar_t[requiredSize];
+		if (!buffer) return std::nullopt;
 
-		requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, wstr.data(), requiredSize);
-		if (requiredSize <= 0) return std::nullopt;
+		requiredSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, buffer, requiredSize);
+		if (requiredSize <= 0)
+		{
+			delete[] buffer;
+			return std::nullopt;
+		}
 
-		return wstr;
+		return std::wstring(buffer);
 	}
 
 	std::optional<std::string> WideToUtf8(const std::wstring& wstr) noexcept
@@ -50,11 +53,16 @@ namespace Utf8
 		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 		if (requiredSize <= 0) return std::nullopt;
 
-		std::string str(requiredSize, '\0');
+		char* buffer = new (std::nothrow) char[requiredSize];
+		if (!buffer) return std::nullopt;
 
-		requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, str.data(), requiredSize, nullptr, nullptr);
-		if (requiredSize <= 0) return std::nullopt;
+		requiredSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, buffer, requiredSize, nullptr, nullptr);
+		if (requiredSize <= 0)
+		{
+			delete[] buffer;
+			return std::nullopt;
+		}
 
-		return str;
+		return std::string(buffer);
 	}
 }
